@@ -21,7 +21,7 @@ public class InsightKafkaConsumer {
     public void consume(AlertEvent event) {
 
         if (event.getUserId() == null || event.getUserId().isBlank()) {
-            log.warn("Discarding ownerless alert event for insight generation");
+            log.warn("Discarding ownerless alert event");
             return;
         }
 
@@ -29,12 +29,8 @@ public class InsightKafkaConsumer {
             return;
         }
 
-        Insight savedInsight =
-                insightService.saveInsight(event);
+        Insight savedInsight = insightService.saveInsight(event);
 
-        log.info(
-                "Insight saved successfully : {}",
-                savedInsight.getId()
-        );
+        log.info("Insight saved successfully: {}", savedInsight.getId());
     }
 }

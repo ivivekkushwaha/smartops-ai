@@ -75,7 +75,7 @@ export function Navbar() {
             <span>Services Online</span>
           </div>
 
-          {/* Notification */}
+          {/* Notification
           <button
             onClick={() => router.push("/alerts")}
             className="relative w-8 h-8 flex items-center justify-center rounded-lg border transition-colors"
@@ -106,9 +106,9 @@ export function Navbar() {
                 {activeAlerts > 99 ? "99+" : activeAlerts}
               </span>
             )} */}
-          </button>
+          {/* </button> */} 
 
-          <button
+          {/* <button
             onClick={() => router.push("/settings")}
             className="w-8 h-8 flex items-center justify-center rounded-lg border transition-colors"
             style={{
@@ -127,7 +127,7 @@ export function Navbar() {
             }}
           >
             <Settings className="w-4 h-4" style={{ color: "var(--text2)" }} />
-          </button>
+          </button> */}
 
           {/* User Menu */}
           <div className="relative">

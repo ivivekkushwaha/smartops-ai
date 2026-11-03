@@ -30,31 +30,13 @@ public interface MonitoringService {
 
     ServiceStatus getServiceHealth(String serviceId, String userId);
 
-    // ==========================================
-    // SERVICE METRICS
-    // ==========================================
 
-    List<PerformanceMetricResponse> getPerformanceMetrics(
-            String serviceId,
-            String timeRange,
-            String userId
-    );
 
-    // ==========================================
-    // SERVICE LOGS
-    // ==========================================
-
-    List<Map<String, Object>> getServiceLogs(
-            String serviceId,
-            int limit,
-            String userId
-    );
 
     // ==========================================
     // SERVICE UPTIME
     // ==========================================
 
-    Map<String, Object> getServiceUptime(String serviceId, String userId);
 
     // ==========================================
     // DASHBOARD (USER BASED)
@@ -62,15 +44,7 @@ public interface MonitoringService {
 
     DashboardMetricsResponse getDashboardMetrics(String userId);
 
-    SystemHealthResponse getSystemHealth(String userId);
 
-    RealTimeMetricsResponse getRealtimeMetrics(String userId);
-
-    // ==========================================
-    // KAFKA METRICS
-    // ==========================================
-
-    KafkaMetricsResponse getKafkaMetrics(String userId);
 
     // ==========================================
     // MONITORING CORE (SCHEDULER)
@@ -82,6 +56,5 @@ public interface MonitoringService {
 
     void deleteService(String id, String userId);
 
-    List<PerformanceMetricResponse> getMetricsByType(String type, String timeRange, String userId);
     void deleteServicesByUserId(String userId);
 }

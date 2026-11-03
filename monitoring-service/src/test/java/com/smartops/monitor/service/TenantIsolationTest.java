@@ -2,7 +2,6 @@ package com.smartops.monitor.service;
 
 import com.smartops.monitor.kafka.KafkaProducerService;
 import com.smartops.monitor.model.ServiceStatus;
-import com.smartops.monitor.repository.LogRepository;
 import com.smartops.monitor.repository.ServiceStatusRepository;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;

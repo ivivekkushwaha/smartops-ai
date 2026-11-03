@@ -6,19 +6,14 @@ import { BarChart3, Clock, Settings, Zap, AlertCircle, Brain, Cog } from 'lucide
 
 const mainNavItems = [
   { href: '/dashboard', icon: BarChart3, label: 'Dashboard', emoji: '📊' },
-  { href: '/logs', icon: Clock, label: 'Live Logs', emoji: '📋' },
+
   { href: '/services', icon: Zap, label: 'Services', emoji: '🔧' },
-  { href: '/alerts', icon: AlertCircle, label: 'Alerts', emoji: '🚨' },
+
 ];
 
-const analysisNavItems = [
-  { href: '/analytics', icon: BarChart3, label: 'Analytics', emoji: '📈' },
-  { href: '/ai-insights', icon: Brain, label: 'AI Insights', emoji: '🤖' },
-];
 
-const systemNavItems = [
-  { href: '/settings', icon: Cog, label: 'Settings', emoji: '⚙️' },
-];
+
+
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -56,29 +51,7 @@ export function Sidebar() {
         </nav>
       </div>
 
-      {/* Analysis Section */}
-      <div className="space-y-1 mt-2">
-        <div className="text-xs uppercase font-semibold px-2.5 py-2 text-text3" style={{ letterSpacing: '0.8px' }}>
-          Analysis
-        </div>
-        <nav className="space-y-0.5">
-          {analysisNavItems.map((item) => (
-            <NavItem key={item.href} href={item.href} label={item.label} emoji={item.emoji} />
-          ))}
-        </nav>
-      </div>
-
-      {/* System Section */}
-      <div className="space-y-1 mt-2 pb-4">
-        <div className="text-xs uppercase font-semibold px-2.5 py-2 text-text3" style={{ letterSpacing: '0.8px' }}>
-          System
-        </div>
-        <nav className="space-y-0.5">
-          {systemNavItems.map((item) => (
-            <NavItem key={item.href} href={item.href} label={item.label} emoji={item.emoji} />
-          ))}
-        </nav>
-      </div>
+      
     </aside>
   );
 }
