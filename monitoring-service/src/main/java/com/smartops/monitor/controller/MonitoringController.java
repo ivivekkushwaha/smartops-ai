@@ -143,6 +143,7 @@ public class MonitoringController {
     public DashboardMetricsResponse getUserDashboard(
             @RequestHeader("X-User-Id") String userId
     ) {
+        System.out.println("working");
         return monitoringService.getDashboardMetrics(userId);
     }
 
