@@ -70,9 +70,10 @@ export function useInsights() {
   };
 
   return {
-    insights,
-    loading,
-    error,
-    refresh: loadInsights,
-  };
+  insights,
+  setInsights,
+  loading,
+  error,
+  refresh: loadInsights,
+}
 }

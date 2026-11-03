@@ -1,10 +1,20 @@
+
 package com.smartops.insightservice.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,52 +28,65 @@ public class GeminiService {
 
     public String generateInsight(String prompt) {
 
-        String url =
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="
-                        + apiKey;
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalStateException("Gemini API key is missing");
+        }
 
-        String requestBody = """
-                {
-                  "contents": [
-                    {
-                      "parts": [
-                        {
-                          "text": "%s"
-                        }
-                      ]
-                    }
-                  ]
-                }
-                """.formatted(
-                prompt
-                        .replace("\\", "\\\\")
-                        .replace("\"", "\\\"")
-                        .replace("\n", "\\n")
+        if (prompt == null || prompt.isBlank()) {
+            throw new IllegalArgumentException("Prompt cannot be empty");
+        }
+
+        Map<String, Object> requestBody = Map.of(
+                "contents", List.of(
+                        Map.of(
+                                "parts", List.of(
+                                        Map.of("text", prompt)
+                                )
+                        )
+                )
         );
 
         try {
-            return webClient.post()
-                    .uri(url)
-                    .header("Content-Type", "application/json")
+            JsonNode response = webClient.post()
+                    .uri(uriBuilder -> uriBuilder
+                            .scheme("https")
+                            .host("generativelanguage.googleapis.com")
+                            .path("/v1beta/models/gemini-3.5-flash-lite:generateContent")
+                            .queryParam("key", apiKey)
+                            .build())
+                    .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(requestBody)
                     .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-        }
-        catch (Exception e) {
+                    .bodyToMono(JsonNode.class)
+                    .block(Duration.ofSeconds(30));
 
-            log.error("Gemini API call failed", e);
+            JsonNode textNode = response == null
+                    ? null
+                    : response.path("candidates")
+                    .path(0)
+                    .path("content")
+                    .path("parts")
+                    .path(0)
+                    .path("text");
 
-            return """
-        {
-          "severity":"UNKNOWN",
-          "summary":"Gemini API unavailable",
-          "rootCause":"Rate limit exceeded",
-          "impact":"AI analysis could not be generated",
-          "recommendation":"Retry later",
-          "confidence":0
-        }
-        """;
+            if (textNode == null || textNode.isMissingNode()
+                    || textNode.isNull() || textNode.asText().isBlank()) {
+                throw new IllegalStateException(
+                        "Gemini returned an empty response: " + response
+                );
+            }
+
+            return textNode.asText();
+
+        } catch (WebClientResponseException e) {
+
+            log.error("Gemini API error: status={}, response={}",
+                    e.getStatusCode(),
+                    e.getResponseBodyAsString());
+
+            throw new IllegalStateException(
+                    "Gemini API request failed: " + e.getResponseBodyAsString(), e
+            );
         }
     }
 }

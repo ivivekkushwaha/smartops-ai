@@ -94,46 +94,16 @@ public class MonitoringController {
 
 
 
-    // ==========================================
-    // SERVICE METRICS
-    // ==========================================
-
-    @GetMapping("/services/{serviceId}/metrics")
-    public List<PerformanceMetricResponse> getServiceMetrics(
-            @PathVariable String serviceId,
-            @RequestParam(defaultValue = "hour") String timeRange,
-            @RequestHeader("X-User-Id") String userId
-    ) {
-        return monitoringService.getPerformanceMetrics(
-                serviceId,
-                timeRange, userId
-        );
-    }
 
     // ==========================================
     // SERVICE LOGS
     // ==========================================
 
-    @GetMapping("/services/{serviceId}/logs")
-    public List<Map<String, Object>> getServiceLogs(
-            @PathVariable String serviceId,
-            @RequestParam(defaultValue = "100") @Min(1) @Max(100) int limit,
-            @RequestHeader("X-User-Id") String userId
-    ) {
-        return monitoringService.getServiceLogs(serviceId, limit, userId);
-    }
 
     // ==========================================
     // SERVICE UPTIME
     // ==========================================
 
-    @GetMapping("/services/{serviceId}/uptime")
-    public Map<String, Object> getServiceUptime(
-            @PathVariable String serviceId,
-            @RequestHeader("X-User-Id") String userId
-    ) {
-        return monitoringService.getServiceUptime(serviceId, userId);
-    }
 
     // ==========================================
     // USER DASHBOARD (FILTERED)
@@ -147,39 +117,5 @@ public class MonitoringController {
         return monitoringService.getDashboardMetrics(userId);
     }
 
-    @GetMapping("/health")
-    public SystemHealthResponse getSystemHealth(
-            @RequestHeader("X-User-Id") String userId
-    ) {
-        return monitoringService.getSystemHealth(userId);
-    }
 
-    // ==========================================
-    // REALTIME METRICS
-    // ==========================================
-
-    @GetMapping("/realtime")
-    public RealTimeMetricsResponse getRealtimeMetrics(
-            @RequestHeader("X-User-Id") String userId
-    ) {
-        return monitoringService.getRealtimeMetrics(userId);
-    }
-
-    // ==========================================
-    // KAFKA METRICS (GLOBAL OR USER)
-    // ==========================================
-
-    @GetMapping("/kafka")
-    public KafkaMetricsResponse getKafkaMetrics(@RequestHeader("X-User-Id") String userId) {
-        return monitoringService.getKafkaMetrics(userId);
-    }
-
-    @GetMapping("/metrics/{type}")
-    public List<PerformanceMetricResponse> getMetricsByType(
-            @PathVariable String type,
-            @RequestParam(defaultValue = "day") String timeRange,
-            @RequestHeader("X-User-Id") String userId
-    ) {
-        return monitoringService.getMetricsByType(type, timeRange, userId);
-    }
 }
